@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Login</title>
+    <script src="https://cdn.auth0.com/js/auth0/9.11/auth0.min.js"></script>
+</head>
+<body>
+    <h1>Login to Access the Dashboard</h1>
+    <button onclick="login()">Login</button>
+    <button onclick="logout()">Logout</button>
+    
+    <div id="dashboard-container" style="display:none;">
+        <h2>Your Dashboard</h2>
+        <iframe id="dashboard" src="https://lookerstudio.google.com/embed/reporting/a8ed2baf-915e-4604-83a7-c8178d3a2702/page/p_xm7dntypqd" width="800" height="600" style="border:0;"></iframe>
+    </div>
+
+    <script>
+        var auth0 = new auth0.WebAuth({
+            domain: "nobi01.us.auth0.com",
+            clientID: "nDrujKGrzCtvEAv9nubawpzTrsGVYhdA",
+            redirectUri: "http://localhost:5500",
+            responseType: "token id_token",
+            scope: "openid profile email"
+        }); // ❌ Removed extra `});` here
+
+        function login() {
+            auth0.authorize();
+        }
+
+        function logout() {
+            window.location.href = "/";
+        }
+
+        function handleAuth() {
+            auth0.parseHash((err, authResult) => {
+                if (authResult && authResult.idToken) {
+                    document.getElementById("dashboard-container").style.display = "block";
+                }
+            });
+        }
+
+        handleAuth();
+    </script>
+</body>
+</html>
